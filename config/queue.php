@@ -76,10 +76,10 @@ return [
             'hosts' => [
                 [
                     'host' => env('RABBITMQ_HOST', '127.0.0.1'),
-                    'port' => env('RABBITMQ_PORT', 5672),
+                    'port' => env('RABBITMQ_PORT', '5672'),
                     'user' => env('RABBITMQ_USER', 'guest'),
                     'password' => env('RABBITMQ_PASSWORD', 'guest'),
-                    'vhost' => env('RABBITMQ_VHOST', '/'),
+                    'vhost' => env('RABBITMQ_VHOST', 'guest'),
                 ],
             ],
 
@@ -92,6 +92,11 @@ return [
                     'passphrase' => env('RABBITMQ_SSL_PASSPHRASE', null),
                 ],
                 'queue' => [
+                    'exchange' => 'generals_exchange',
+                    'exchange_type' => 'topic',
+                    'exchange_routing_key' => 'generals_rk',
+                    'prioritize_delayed' =>  false,
+                    'queue_max_priority' => 10,
                     'job' => VladimirYuldashev\LaravelQueueRabbitMQ\Queue\Jobs\RabbitMQJob::class,
                 ],
             ],
