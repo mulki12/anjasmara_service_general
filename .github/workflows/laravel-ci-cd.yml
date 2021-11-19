@@ -31,8 +31,6 @@ jobs:
           extension-csv: mbstring, bcmath, pdo, pdo_mysql, sockets, amqp # Setup any required extensions for tests
       - name: Composer install
         run: composer install
-      - name: Generate key
-        run: php artisan key:generate
       - name: Run Tests
         run: ./vendor/bin/phpunit
       - name: Execute tests (Unit and Feature tests) via PHPUnit
