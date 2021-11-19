@@ -19,6 +19,7 @@ jobs:
           name: assets
           path: public
   app-tests:
+    name: Testing-DB
     runs-on: ubuntu-latest
     services:
       mysql:
