@@ -47,10 +47,7 @@ jobs:
         with:
           name: assets
           path: public
-      - name: composer install
-        uses: composer install
-      - name: build container 
-        uses: docker build .
+        
   build-js-staging:
     name: Build JavaScript/CSS for STAGING Server
     runs-on: ubuntu-latest
@@ -66,10 +63,7 @@ jobs:
         with:
           name: assets
           path: public
-      - name: composer install
-        uses: composer install
-      - name: build container 
-        uses: docker build .
+
   deploy-production:
     name: Deploy Project to PRODUCTION Server
     runs-on: ubuntu-latest
@@ -86,7 +80,7 @@ jobs:
         uses: shivammathur/setup-php@master
         with:
           php-version: 7.4
-          extension-csv: mbstring, bcmath
+          extension-csv: mbstring, bcmath, sockets, amqp
       - name: Composer install
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
       - name: Login to Docker Hub
