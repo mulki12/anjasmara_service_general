@@ -86,10 +86,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
           ssh-known-hosts: ${{ secrets.HOST }}
-      - name: Deploy to PRODUCTION Server
-        env:
-          DOT_ENV: ${{ secrets.DOT_ENV_PRODUCTION }}
-        run: dep deploy production --tag=${{ env.GITHUB_REF }} -vvv
+
   deploy-staging:
     name: Deploy Project to STAGING Server
     runs-on: ubuntu-latest
