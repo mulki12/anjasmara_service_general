@@ -30,7 +30,7 @@ jobs:
           php-version: 7.4 # Use your PHP version
           extension-csv: mbstring, bcmath, pdo, pdo_mysql, sockets, amqp # Setup any required extensions for tests
       - name: Composer install
-        run: composer install1
+        run: composer install
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
           DB_CONNECTION: mysql
