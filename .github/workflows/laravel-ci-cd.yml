@@ -3,7 +3,6 @@ name: general-ci-cd
 on:
   push:
     branches: [ master ]
-]
 
 jobs:
   build-js:
