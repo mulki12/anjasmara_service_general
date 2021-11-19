@@ -31,8 +31,8 @@ jobs:
           extension-csv: mbstring, bcmath, pdo, pdo_mysql, sockets, amqp # Setup any required extensions for tests
       - name: Composer install
         run: composer install
-      - name: composer migrate
-        run: php artisan migrate:fresh
+      - name: Composer update
+        run: composer update
       
   deploy:
     name: Deploy to Production
