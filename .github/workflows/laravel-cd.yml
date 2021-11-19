@@ -47,6 +47,10 @@ jobs:
         with:
           name: assets
           path: public
+      - name: composer install
+        uses: composer install
+      - name: build container 
+        uses: docker build .
   build-js-staging:
     name: Build JavaScript/CSS for STAGING Server
     runs-on: ubuntu-latest
@@ -62,6 +66,10 @@ jobs:
         with:
           name: assets
           path: public
+      - name: composer install
+        uses: composer install
+      - name: build container 
+        uses: docker build .
   deploy-production:
     name: Deploy Project to PRODUCTION Server
     runs-on: ubuntu-latest
@@ -81,11 +89,26 @@ jobs:
           extension-csv: mbstring, bcmath
       - name: Composer install
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
-      - name: Setup Deployer
-        uses: atymic/deployer-php-action@master
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          ssh-known-hosts: ${{ secrets.HOST }}
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/anjasmara_service_users_v1:latest
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
 
   deploy-staging:
     name: Deploy Project to STAGING Server
