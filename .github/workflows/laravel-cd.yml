@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Copy .env
-        run: "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        run: php -r \"file_exists('.env') || copy('.env.example', '.env');\"
       - name: Install Composer Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
       - name: Install NPM Dependencies
@@ -81,7 +81,7 @@ jobs:
           php-version: 7.4
           extension-csv: mbstring, bcmath, sockets, amqp
       - name: Copy .env
-        run: "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        run: php -r \"file_exists('.env') || copy('.env.example', '.env');\"
       - name: Composer install
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
       - name: Login to Docker Hub
