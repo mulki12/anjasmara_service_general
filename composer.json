@@ -19,7 +19,7 @@
         "illuminate/queue": "^8.0",
         "videlalvaro/php-amqplib": "^2.4",
         "vladimir-yuldashev/laravel-queue-rabbitmq": "^11.2",
-        "elasticquent/elasticqent": "dev-master"
+        "elasticquent/elasticquent": "dev-master"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
