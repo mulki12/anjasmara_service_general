@@ -47,10 +47,5 @@ pipeline {
                 sh "docker run -d --rm -p 3001:3001 --name generals anjasmara_service_generals"
             }
         }
-#        stage('Deploy') {
-#            steps {
-#                echo 'Deploying....'
-#            }
-#        }
     }
 }
