@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage("Build") {
             environment {
                 DB_HOST = mariadb
                 DB_DATABASE = anjasmara_service_generals
@@ -20,7 +20,7 @@ pipeline {
                 sh 'php artisan migrate:fresh'
             }
         }
-        stage('Unit Test') {
+        stage("Unit Test") {
             steps {
                 sh 'php artisan test'
             }
