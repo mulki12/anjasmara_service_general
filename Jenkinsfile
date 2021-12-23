@@ -10,10 +10,5 @@ pipeline {
                 sh 'php artisan key:generate'
             }
         }
-        stage("Unit test") {
-            steps {
-                sh 'php artisan test'
-            }
-        }
   }
 }
