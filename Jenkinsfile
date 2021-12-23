@@ -4,10 +4,10 @@ pipeline {
     stages {
         stage("Build") {
             environment {
-                DB_HOST = mariadb
-                DB_DATABASE = anjasmara_service_generals
-                DB_USERNAME = root
-                DB_PASSWORD = anjas123
+                DB_HOST = credentials("mariadb")
+                DB_DATABASE = credentials("anjasmara_service_generals")
+                DB_USERNAME = credentials("root")
+                DB_PASSWORD = credentials("anjas123")
             steps {
                 sh 'php --version'
                 sh 'composer install'
@@ -32,8 +32,8 @@ pipeline {
         }
         stage("Docker push") {
             environment {
-                DOCKER_USERNAME = mulki12
-                DOCKER_PASSWORD = 7dfb3be7-2f9a-488b-8ad2-784c1bc9da18
+                DOCKER_USERNAME = credentials("mulki12")
+                DOCKER_PASSWORD = credentials("7dfb3be7-2f9a-488b-8ad2-784c1bc9da18")
             }
             steps {
                 sh "docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}"
