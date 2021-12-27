@@ -8,7 +8,7 @@ pipeline {
         stage("build") {
             steps {
                 echo 'building the application...'
-                echo "build bersion ${NEW_VERSION}"
+                echo "build version ${NEW_VERSION}"
             }
         }
               
@@ -21,6 +21,7 @@ pipeline {
         stage("deploy") {
             steps {
                 echo 'deploying the application...'
+                echo "build version ${NEW_VERSION}"
                 echo "deploying with ${SERVER_CREDETIALS}"
                 sh "${SERVER_CREDENTIALS}"
             }
