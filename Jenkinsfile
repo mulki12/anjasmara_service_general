@@ -22,7 +22,7 @@ pipeline {
             steps {
                 echo 'deploying the application...'
                 echo "build version ${NEW_VERSION}"
-                echo "deploying with ${SERVER_CREDETIALS}"
+                echo "deploying with ${SERVER_CREDENTIALS}"
                 sh "${SERVER_CREDENTIALS}"
             }
         }
