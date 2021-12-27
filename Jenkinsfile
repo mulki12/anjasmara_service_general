@@ -1,9 +1,14 @@
 pipeline {
     agent any
+    environment {
+        NEW_VERSION = '1.2.2'
+        SERVER_CREDENTIALS = credentials('server-credentials')
+    }
     stages {
-        stage("build" {
+        stage("build") {
             steps {
                 echo 'building the application...'
+                echo "build bersion ${NEW_VERSION}"
             }
         }
               
@@ -16,9 +21,9 @@ pipeline {
         stage("deploy") {
             steps {
                 echo 'deploying the application...'
+                echo "deploying with ${SERVER_CREDETIALS}"
+                sh "${SERVER_CREDENTIALS}"
             }
         }
-     }
+    }
 }
-              
-                  
