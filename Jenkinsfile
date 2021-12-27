@@ -1,34 +1,37 @@
 pipeline {
-    environment {
-        BUILD_SCRIPT_GIT="http://github.com/mulki12/anjasmara_service_general.git"
-        BUILD_SCRIPTS='mypipeline'
-        BUILD_HOME='/var/jenkins_home'
+    agent {
+        docker {
+            image 'php:7.0'
+            args '-u root:sudo'
+        }
     }
- agent any
- stages {
-        stage('Checkout: Code') {
+    stages {
+        stage('Build') {
             steps {
-                sh "mkdir -p $WORKSPACE/repo;\
-                git config --global user.email 'miftahul.mulki95@gmail.com';\
-                git config --global user.name 'mulki12';\
-                git config --global push.default simple;\
-                git clone $BUILD_SCRIPTS_GIT repo/$BUILD_SCRIPTS"
-                sh "chmod -R +x $WORKSPACE/repo/$BUILD_SCRIPTS"
-                }
-            }
- stages {
-        stage("Build") {
-            steps {
-                sh 'php --version'
-                sh 'composer install'
-                sh 'composer --version'
-                sh 'cp .env.example .env'
-                sh 'php artisan key:generate'
+                /**
+                 * Install packages
+                 */
+                sh '''apt-get update -q
+                apt-get install git -y
+                apt-get autoremove graphviz -y
+                apt-get install graphviz -y
+                '''
+
+                /**
+                 * Install composer
+                 */
+                sh '''
+                    echo $USER
+                    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+                    php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+                    php composer-setup.php
+                    php -r "unlink('composer-setup.php');"
+                    php composer.phar self-update
+                    php composer.phar install --no-interaction
+                    ls -la
+                    vendor/bin/phpunit
+                '''
             }
         }
-  post {
-        always {
-            cleanWs()
-          }
-  }
+    }
 }
