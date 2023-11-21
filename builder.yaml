@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: anjasmara_service_general
+  name: anjasmara-service-general
 spec:
   containers:
   - name: kubectl
@@ -9,7 +9,7 @@ spec:
     command:
     - /bin/cat
     tty: true    
-  - name: anjasmara_service_general
+  - name: anjasmara-service-general
     image: mulki12/anjasmara_service_general
     command:
     - /busybox/cat
