@@ -15,12 +15,13 @@ spec:
     - /busybox/cat
     tty: true
     volumeMounts:
-      - name: anjasmara_service_general-secret
-        mountPath: /anjasmara_service_general/.docker
+      - name: kaniko-secret
+        mountPath: /kaniko/.docker
   volumes:
-    - name: anjasmara_service_general-secret
+    - name: kaniko-secret
       secret:
         secretName: regcred
         items:
           - key: .dockerconfigjson
             path: config.json
+
