@@ -9,8 +9,8 @@ spec:
     command:
     - /bin/cat
     tty: true    
-  - name: anjasmara-service-general
-    image: mulki12/anjasmara_service_general
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:debug
     command:
     - /busybox/cat
     tty: true
