@@ -9,31 +9,31 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: myweb
-  name: myweb
+    app: anjasmara-service-general
+  name: anjasmara-service-general
   namespace: pipeline-demo
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: myweb
+      app: anjasmara-service-general
   template:
     metadata:
       labels:
-        app: myweb
+        app: anjasmara-service-general
     spec:
       containers:
       - image: justmeandopensource/myweb:<TAG>
         imagePullPolicy: Always
-        name: myweb
+        name: anjasmara-service-general
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: myweb
-  name: myweb
+    app: anjasmara-service-general
+  name: anjasmara-service-general
   namespace: pipeline-demo
 spec:
   ports:
@@ -42,5 +42,5 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    app: myweb
+    app: anjasmara-service-general
   type: NodePort
