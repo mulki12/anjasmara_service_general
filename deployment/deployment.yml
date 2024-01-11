@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: anjasmara-service-general
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: anjasmara-service-general
+  template:
+    metadata:
+      labels:
+        app: anjasmara-service-general
+    spec:
+      containers:
+      - image: mulki12/anjasmara_service_general
+        name: anjasmara-service-general
+        ports:
+        - containerPort: 3001
