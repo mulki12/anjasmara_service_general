@@ -1,4 +1,7 @@
 pipeline {
+    agent {
+           label 'agent-deployment'
+    }
     stages{
         stage("checkout"){
             steps{
