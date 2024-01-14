@@ -1,7 +1,4 @@
 pipeline {
-    agent {
-           label 'anjasmara_service_general'
-    }
     stages{
         stage("checkout"){
             steps{
