@@ -12,13 +12,13 @@ pipeline {
         stage("Test"){
             steps{
                 sh 'sudo apt-get update && apt-get install -y libmcrypt-dev zip unzip git libonig-dev librabbitmq-dev libssh-dev -y'
-                sh 'php artisan queue:work'
+                sh 'sudo php artisan queue:work'
             }
         }
 
         stage("Build"){
             steps{
-                sh 'php artisan migrate:fresh'
+                sh 'sudo php artisan migrate:fresh'
             }
         }
 
