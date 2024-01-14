@@ -9,19 +9,6 @@ pipeline {
             }
         }
 
-        stage("Test"){
-            steps{
-                sh 'sudo apt-get install net-tools -y'
-                sh 'sudo php artisan queue:work'
-            }
-        }
-
-        stage("Build"){
-            steps{
-                sh 'sudo php artisan migrate:fresh'
-            }
-        }
-
         stage("Build Image"){
             steps{
                 sh 'sudo docker build -t anjasmara_service_general:latest .'
