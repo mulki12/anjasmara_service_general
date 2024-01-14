@@ -11,7 +11,7 @@ pipeline {
 
         stage("Test"){
             steps{
-                sh 'sudo apt-get update && apt-get install -y libmcrypt-dev zip unzip git libonig-dev librabbitmq-dev libssh-dev -y'
+                sh 'sudo apt-get install libmcrypt-dev zip unzip git libonig-dev librabbitmq-dev libssh-dev -y'
                 sh 'sudo php artisan queue:work'
             }
         }
