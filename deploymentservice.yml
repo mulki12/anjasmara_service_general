@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: anjasmara-service-general
-        image: mulki12/anjasmara-service-general:latest
+        image: mulki12/anjasmara_service_general:latest
         ports:
         - containerPort: 3001
         
