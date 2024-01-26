@@ -1,35 +1,45 @@
 pipeline {
-    agent {
-           label 'agent-deployment'
-    }
-    stages{
-        stage("checkout"){
-            steps{
-                checkout scm
-            }
-        }
 
-        stage("Build Image"){
-            steps{
-                sh 'sudo docker build -t anjasmara_service_general:latest .'
-            }
-        }
-        stage('Docker Push') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'docker_cred', passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
-                    sh 'sudo docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD'
-                    sh 'sudo docker tag anjasmara_service_general:latest mulki12/anjasmara_service_general:latest'
-                    sh 'sudo docker push mulki12/anjasmara_service_general:latest'
-                    sh 'sudo docker logout'
-                }
-            }
-        }
+  agent any
 
-      stage('Docker RUN') {
-          steps {
-      	     sh 'sudo docker run -d -p 3000 --name anjasmara_service_general  mulki12/anjasmara_service_general:latest:latest'
+  stages {
+
+    stage('Checkout Source') {
+      steps {
+        git 'https://github.com/mulki12/anjasmara_service_general.git'
       }
     }
-}    
+
+    stage('Build image') {
+      steps{
+        script{
+          sh 'docker build . '
+          sh 'docker image list'
+         }
+      }
+    }
+
+//    stage('Deploy our image') {
+//      steps{
+//        script {
+//          docker.withRegistry( '', registryCredential ) {
+//            dockerImage.push("latest")
+//          }
+//        }
+//      }
+//    }
+
+    stage('Deploying App to Kubernetes') {
+      steps {
+        withKubeConfig([credentialsId: 'config', serverUrl: 'https://41C5B63274E00776BA12E1EF485D47DA.gr7.ap-southeast-1.eks.amazonaws.com']) {
+          sh 'cat deploymentservice.yml | sed "s/{{BUILD_NUMBER}}/$BUILD_NUMBER/g" | kubectl apply -f -'
+          sh 'kubectl apply -f deploymentservice.yml'
+        }
+      }
+    }
+
+  }
+
 }
-    
+
+
