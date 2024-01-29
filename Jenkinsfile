@@ -4,6 +4,7 @@ pipeline {
   environment {
     AWS_ACCOUNT_ID="221047265242"
     AWS_DEFAULT_REGION="ap-southeast-1"
+    PROJECT_NAME="test-laravel"
     //REPO_NAME="https://github.com/mulki12/anjasmara_service_general.git"
     REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/test-laravel"
   }
@@ -20,7 +21,7 @@ pipeline {
         steps{
           script{
             sh 'sudo docker login -u mulki12 -p 12Februari@'
-            sh 'docker build -t "$JOB_NAME:v1.$BUILD_ID" .'
+            sh 'docker build -t "$PROJECT_NAME:v1.$BUILD_ID" .'
             sh 'docker image list'
           }
         }
@@ -30,9 +31,9 @@ pipeline {
         steps{  
           script {
             sh 'aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 221047265242.dkr.ecr.ap-southeast-1.amazonaws.com' 
-            sh 'docker tag $JOB_NAME: ${REPOSITORY_URI}:v1.$BUILD_ID'
+            sh 'docker tag $PROJECT_NAME: ${REPOSITORY_URI}:v1.$BUILD_ID'
             sh 'docker push ${REPOSITORY_URI}:v1.$BUILD_ID'
-            sh 'docker rmi $JOB_NAME:v1.$BUILD_ID ${REPOSITORY_URI}:v1.$BUILD_ID' // Delete docker images from server 
+            sh 'docker rmi $PROJECT_NAME:v1.$BUILD_ID ${REPOSITORY_URI}:v1.$BUILD_ID' // Delete docker images from server 
           }
         }
       }
