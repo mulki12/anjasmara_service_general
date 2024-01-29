@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: anjasmara-service-general
-        image: CONTAINER_IMAGE221047265242.dkr.ecr.ap-southeast-1.amazonaws.com/app_and_version
+        image: 221047265242.dkr.ecr.ap-southeast-1.amazonaws.com/app_and_version
         ports:
         - containerPort: 3001       
 ---
