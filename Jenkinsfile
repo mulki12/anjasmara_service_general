@@ -1,12 +1,16 @@
 pipeline {
 
   agent any
+  environment {
+    registry = "221047265242.dkr.ecr.ap-southeast-1.amazonaws.com/waizly-ecr"
+  }
 
   stages {
 
     stage('Checkout Source') {
       steps {
-        git 'https://github.com/mulki12/anjasmara_service_general.git'
+        //git 'https://github.com/mulki12/anjasmara_service_general.git'
+         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/mulki12/anjasmara_service_general.git']]])     
       }
     }
 
@@ -15,9 +19,20 @@ pipeline {
         script{
           sh 'docker build . '
           sh 'docker image list'
+          sh 'docker tag $JOB_NAME:v1.$BUILD_ID ${registry}:v1.$BUILD_ID'
          }
       }
     }
+    // Uploading Docker images into AWS ECR
+       stage('Pushing to ECR') {
+         steps{  
+           script {
+             sh 'aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 221047265242.dkr.ecr.ap-southeast-1.amazonaws.com' 
+             sh 'docker push ${registry}:v1.$BUILD_ID'
+             sh 'docker rmi $JOB_NAME:v1.$BUILD_ID ${registry}:v1.$BUILD_ID' // Delete docker images from server 
+           }
+          }
+         }
 
 //    stage('Deploy our image') {
 //      steps{
