@@ -1,30 +1,112 @@
+def AWS_ACCOUNT_ID="221047265242"
+def APP_NAME="anjasmara_service_general"
+def NAMESPACE="health-check"
+def NAME_APP="test-laravel"
+def IMAGE_TAG=""
+def CODE_REPO="https://github.com/mulki12/anjasmara_service_general.git"
+def CREDENTIAL_CODE_REPO="github-mulki"
+def CODE_REPO="https://github.com/mulki12/anjasmara_service_general_config.git"
+def CREDENTIAL_CONFIG_REPO="github-mulki"
+
 pipeline {
 
   agent any
   environment {
+    KUBECONFIG = credentials('config')
     AWS_ACCOUNT_ID="221047265242"
+    REPO_CODE_NAME="anjasmara_service_general"
     AWS_DEFAULT_REGION="ap-southeast-1"
+    NAMESPACE="health-check"
     //REPO_NAME="https://github.com/mulki12/anjasmara_service_general.git"
     REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/test-laravel"
   }
 
   stages {
 
-    stage('Checkout Source') {
-      steps {
-        //git 'https://github.com/mulki12/anjasmara_service_general.git'
-         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/mulki12/anjasmara_service_general.git']]])     
+        stage('clone') {
+            steps {
+                container('jnlp') {
+                    checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: params.BRANCH]],
+                    extensions: [[
+                        $class: 'RelativeTargetDirectory',
+                        relativeTargetDir: 'code']],
+                    userRemoteConfigs: [[
+                        url: "${CODE_REPO}",
+                        credentialsId: "${CREDENTIALS_CODE_REPO}",
+                    ]]
+                ])
+
+                    checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: 'refs/heads/master']],
+                    extensions: [[
+                        $class: 'RelativeTargetDirectory',
+                        relativeTargetDir: 'config']],
+                    userRemoteConfigs: [[
+                        url: "${CONFIG_REPO}",
+                        credentialsId: "${CREDENTIALS_CONFIG_REPO}",
+                    ]]
+                ])
+                }
+            }
+        }
+
+    stage("build image") {
+      environment {
+        REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/test-laravel"
       }
-    }
-    stage('Build image') {
-        steps{
-          script{
-            sh 'sudo docker login -u mulki12 -p 12Februari@'
-            sh 'docker build -t "$JOB_NAME:$BUILD_ID" .'
-            sh 'docker image list'
-          }
+      steps {
+        container("jnlp") {
+            dir('code') {
+               script {
+
+                    sh 'git rev-parse --short HEAD > .git/commit-id'
+
+                    def commit_id = readFile('.git/commit-id').trim()
+                    IMAGE_TAG = commit_id.substring(0,7)
+
+
+                    sh "ls -lah"
+                    sh "pwd"
+                    {
+
+                    sh "ssh docker build -t ${NAME_APP}:${IMAGE_TAG} ."
+
+                    sh "ssh docker push ${REPOSITORY_URI}:${IMAGE_TAG}"
+
+                    }
+
+                    sh "ls -lah"
+               }
+            }
         }
       }
+    }
+
+    stage('deploy helm') {
+        steps{
+          container('helm'){
+            script {
+              withKubeConfig([credentialsId: 'config', serverUrl: '']) {
+                dir ('config') {
+                  echo "Deploy to cluster ${KUBECONFIG}"
+                  sh 'mkdir -p ~/.kube/'
+                  writeFile: '~/.kube/config', text:readFile(KUBECONFIG)
+                  sh """
+            helm upgrade ${REPO_CODE_NAME} ./helm/${REPO_CODE_NAME} \
+            --set-string image.repository=${REPOSITORY_URI},image.tag=${BUILD_ID} \
+            -f ./helm/values.dev.yml --debug --install --namespace ${NAMESPACE}
+            """
+                }
+            }
+
+          }
+          
+          
+        }
+    }
     // Uploading Docker images into AWS ECR
     stage('Pushing to ECR') {
         steps{  
