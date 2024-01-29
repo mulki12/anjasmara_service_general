@@ -23,7 +23,7 @@ pipeline {
                     date +"-%Y%m%d_%H%M"
                     """.trim(), returnStdout: true
                 version = currentDateTime.trim()  // the .trim() is necessary
-                echo "version: " + version
+                echo "VERSION: " + version
             }
         }
     }
@@ -31,7 +31,7 @@ pipeline {
       steps{
         script{
           sh 'sudo docker login -u mulki12 -p 12Februari@'
-          sh 'docker build -t "$JOB_NAME:${version}" .'
+          sh 'docker build -t "$JOB_NAME:$VERSION" .'
           sh 'docker image list'
          }
       }
@@ -41,9 +41,9 @@ pipeline {
          steps{  
            script {
              sh 'aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 221047265242.dkr.ecr.ap-southeast-1.amazonaws.com' 
-             sh 'docker tag $JOB_NAME: ${REPOSITORY_URI}:${version}'
-             sh 'docker push ${REPOSITORY_URI}:${version}'
-             sh 'docker rmi $JOB_NAME:${version} ${REPOSITORY_URI}:${version}' // Delete docker images from server 
+             sh 'docker tag $JOB_NAME: ${REPOSITORY_URI}:$VERSION'
+             sh 'docker push ${REPOSITORY_URI}:$VERSION'
+             sh 'docker rmi $JOB_NAME:$VERSION ${REPOSITORY_URI}:$VERSION' // Delete docker images from server 
            }
           }
          }
