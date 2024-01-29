@@ -82,7 +82,7 @@ pipeline {
               withKubeConfig([credentialsId: 'config', serverUrl: '']) {
                 dir ('config') {
                   echo "Deploy to cluster ${KUBECONFIG}"
-                  sh 'sudo mkdir -p /var/lib/jenkins/.kube'
+                  //sh 'sudo mkdir -p /var/lib/jenkins/.kube'
                   writeFile: '/var/lib/jenkins/.kube/config', text:readFile(KUBECONFIG)
                   sh """
             helm upgrade ${REPO_CODE_NAME} ./helm/${REPO_CODE_NAME} \
