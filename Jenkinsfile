@@ -17,7 +17,7 @@ pipeline {
       }
     }
     stage('Build image') {
-      when { tag "release-*" }
+      when { tag "deploy-*" }
         steps{
           script{
             sh 'sudo docker login -u mulki12 -p 12Februari@'
