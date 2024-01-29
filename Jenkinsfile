@@ -56,9 +56,9 @@ pipeline {
             dir('code') {
                script {
 
-                    sh 'git rev-parse --short HEAD > .git/commit-id'
+                    //sh 'git rev-parse --short HEAD > .git/commit-id'
 
-                    def commit_id = readFile('.git/commit-id').trim()
+                    //def commit_id = readFile('.git/commit-id').trim()
                     IMAGE_TAG = commit_id.substring(0,7)
 
 
