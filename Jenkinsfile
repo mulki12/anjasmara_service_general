@@ -14,7 +14,7 @@ pipeline {
     stage('Checkout Source') {
       steps {
         //git 'https://github.com/mulki12/anjasmara_service_general.git'
-         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: '$REPO_NAME']]])     
+         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: '${REPO_NAME}']]])     
       }
     }
 
