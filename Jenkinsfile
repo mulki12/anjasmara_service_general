@@ -22,7 +22,8 @@ pipeline {
                 container('jnlp') {
                     checkout([
                     $class: 'GitSCM',
-                    branches: [[name: params.BRANCH]],
+                    branches: [[name: 'refs/heads/master']],
+                    //branches: [[name: params.BRANCH]],
                     extensions: [[
                         $class: 'RelativeTargetDirectory',
                         relativeTargetDir: 'code']],
