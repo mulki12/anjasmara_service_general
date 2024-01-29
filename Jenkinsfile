@@ -13,7 +13,42 @@ def REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.
 
 pipeline {
 
-  agent any
+  agent 
+    kubernetes {
+      defaultContainer "jnlp"
+      yaml """
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          labels:
+            component: ci
+        spec:
+          tolerations:
+          - key: "jenkins"
+            operator: "Equal"
+            value: "agent"
+            effect: "NoSchedule"
+          affinity:
+            nodeAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+               - preference:
+                   matchExpressions:
+                   - key: jenkins
+                     operator: In
+                     values:
+                     - agent
+                 weight: 100
+          serviceAccountName: cd-jenkins
+          containers:
+          - name: builders
+            image: masfikri/gcloud-helm-kubectl:v3.13.3
+            imagePullPolicy: IfNotPresent
+            command:
+            - cat
+            tty: true
+      """
+    }
+  }
 
   stages {
 
