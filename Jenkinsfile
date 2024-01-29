@@ -2,7 +2,7 @@ pipeline {
 
   agent any
   environment {
-    registry = "221047265242.dkr.ecr.ap-southeast-1.amazonaws.com/waizly-ecr"
+    registry = "221047265242.dkr.ecr.ap-southeast-1.amazonaws.com/test-laravel"
   }
 
   stages {
