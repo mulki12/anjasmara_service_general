@@ -5,7 +5,7 @@ pipeline {
     AWS_ACCOUNT_ID="221047265242"
     AWS_DEFAULT_REGION="ap-southeast-1"
     //REPO_NAME="https://github.com/mulki12/anjasmara_service_general.git"
-    REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
+    REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/test-laravel"
   }
 
   stages {
