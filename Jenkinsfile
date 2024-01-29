@@ -83,7 +83,7 @@ pipeline {
                 dir ('config') {
                   echo "Deploy to cluster ${KUBECONFIG}"
                   //sh 'sudo mkdir -p /var/lib/jenkins/.kube'
-                  writeFile: '/var/lib/jenkins/.kube/config', text:readFile(KUBECONFIG)
+                  //writeFile: '/var/lib/jenkins/.kube/config', text:readFile(KUBECONFIG)
                   sh """
             helm upgrade ${REPO_CODE_NAME} ./helm/${REPO_CODE_NAME} \
             --set-string image.repository=${REPOSITORY_URI},image.tag=${BUILD_ID} \
