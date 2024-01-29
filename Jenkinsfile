@@ -51,7 +51,8 @@ pipeline {
     stage('Deploying App to Kubernetes') {
       steps {
         withKubeConfig([credentialsId: 'config', serverUrl: '41C5B63274E00776BA12E1EF485D47DA.gr7.ap-southeast-1.eks.amazonaws.com']) {
-          sh 'cat deploymentservice.yml | sed "s/{{BUILD_NUMBER}}/$BUILD_NUMBER/g" | kubectl apply -f -'
+          //sh 'cat deploymentservice.yml | sed "s/{{BUILD_NUMBER}}/$BUILD_NUMBER/g" | kubectl apply -f -'
+          sh 'sudo chmod u+x /usr/local/bin/kubectl'
           sh 'kubectl apply -f deploymentservice.yml'
         }
       }
