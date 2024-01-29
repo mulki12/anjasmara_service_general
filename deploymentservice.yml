@@ -27,9 +27,7 @@ spec:
           memory: "256Mi"
           cpu: "1000m"
         ports:
-        - containerPort: 3001
-        
-        
+        - containerPort: 3001       
 ---
 
 apiVersion: v1
