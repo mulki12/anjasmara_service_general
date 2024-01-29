@@ -4,8 +4,8 @@ pipeline {
   environment {
     AWS_ACCOUNT_ID="221047265242"
     AWS_DEFAULT_REGION="ap-southeast-1"
-    IMAGE_REPO_NAME="test-laravel"
-    REPO_NAME='https://github.com/mulki12/anjasmara_service_general.git'
+    IMAGE_TAG="latest"
+    //REPO_NAME="https://github.com/mulki12/anjasmara_service_general.git"
     REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
   }
 
