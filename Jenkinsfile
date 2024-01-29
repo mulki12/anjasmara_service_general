@@ -21,7 +21,7 @@ pipeline {
       steps{
         script{
           sh 'sudo docker login -u mulki12 -p 12Februari@'
-          sh 'docker build . '
+          sh 'docker build . "$JOB_NAME:v1.$BUILD_ID"'
           sh 'docker image list'
          }
       }
