@@ -2,7 +2,11 @@ pipeline {
 
   agent any
   environment {
-    registry = "221047265242.dkr.ecr.ap-southeast-1.amazonaws.com/test-laravel"
+    AWS_ACCOUNT_ID="221047265242"
+    AWS_DEFAULT_REGION="ap-southeast-1"
+    IMAGE_REPO_NAME="test-laravel"
+    REPO_NAME='https://github.com/mulki12/anjasmara_service_general.git'
+    REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
   }
 
   stages {
@@ -10,7 +14,7 @@ pipeline {
     stage('Checkout Source') {
       steps {
         //git 'https://github.com/mulki12/anjasmara_service_general.git'
-         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/mulki12/anjasmara_service_general.git']]])     
+         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: '$REPO_NAME']]])     
       }
     }
 
@@ -19,7 +23,6 @@ pipeline {
         script{
           sh 'docker build . '
           sh 'docker image list'
-          sh 'docker tag $JOB_NAME:v1.$BUILD_ID ${registry}:v1.$BUILD_ID'
          }
       }
     }
@@ -28,6 +31,7 @@ pipeline {
          steps{  
            script {
              sh 'aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 221047265242.dkr.ecr.ap-southeast-1.amazonaws.com' 
+             sh 'docker tag ${IMAGE_REPO_NAME}:${IMAGE_TAG} ${REPOSITORY_URI}:$IMAGE_TAG'
              sh 'docker push ${registry}:v1.$BUILD_ID'
              sh 'docker rmi $JOB_NAME:v1.$BUILD_ID ${registry}:v1.$BUILD_ID' // Delete docker images from server 
            }
