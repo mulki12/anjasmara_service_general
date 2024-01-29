@@ -4,6 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: anjasmara-service-general-deployment
+  namespace: health-check
   labels:
     app: anjasmara-service-general
 spec:
@@ -18,15 +19,18 @@ spec:
     spec:
       containers:
       - name: anjasmara-service-general
-        image: 221047265242.dkr.ecr.ap-southeast-1.amazonaws.com/test-laravel:${version}
+        image: 221047265242.dkr.ecr.ap-southeast-1.amazonaws.com/test-laravel
         ports:
-        - containerPort: 3001       
+        - containerPort: 3001
+      imagePullSecrets:
+          - name: regcred       
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
   name: anjasmara-service-general
+  namespace: health-check
 spec:
   selector:
     app: anjasmara-service-general 
