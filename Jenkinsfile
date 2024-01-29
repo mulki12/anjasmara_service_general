@@ -83,7 +83,8 @@ pipeline {
                 dir ('config') {
                   echo "Deploy to cluster ${KUBECONFIG}"
                   sh 'sudo mkdir -p /usr/local/bin/'
-                  writeFile: '/usr/local/bin/kubectl', text:readFile(KUBECONFIG)
+                  //writeFile: '/usr/local/bin/kubectl', text:readFile(KUBECONFIG)
+                  sh 'sudo chmod u+x /usr/local/bin/kubectl', text:readFile(KUBECONFIG)
                   sh """
             helm upgrade ${REPO_CODE_NAME} ./helm/${REPO_CODE_NAME} \
             --set-string image.repository=${REPOSITORY_URI},image.tag=${BUILD_ID} \
