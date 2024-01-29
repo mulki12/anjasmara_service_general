@@ -1,4 +1,5 @@
 def AWS_ACCOUNT_ID="221047265242"
+def AWS_DEFAULT_REGION="ap-southeast-1"
 def APP_NAME="anjasmara_service_general"
 def NAMESPACE="health-check"
 def NAME_APP="test-laravel"
@@ -7,19 +8,12 @@ def CODE_REPO="https://github.com/mulki12/anjasmara_service_general.git"
 def CREDENTIAL_CODE_REPO="github-mulki"
 def CODE_REPO="https://github.com/mulki12/anjasmara_service_general_config.git"
 def CREDENTIAL_CONFIG_REPO="github-mulki"
+def KUBECONFIG="config"
+def REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/test-laravel"
 
 pipeline {
 
   agent any
-  environment {
-    KUBECONFIG = credentials('config')
-    AWS_ACCOUNT_ID="221047265242"
-    REPO_CODE_NAME="anjasmara_service_general"
-    AWS_DEFAULT_REGION="ap-southeast-1"
-    NAMESPACE="health-check"
-    //REPO_NAME="https://github.com/mulki12/anjasmara_service_general.git"
-    REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/test-laravel"
-  }
 
   stages {
 
