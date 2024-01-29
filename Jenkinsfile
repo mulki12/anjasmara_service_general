@@ -48,6 +48,7 @@ pipeline {
 //      }
 //    }
 
+
     stage('Deploying App to Kubernetes') {
       steps {
         withKubeConfig([credentialsId: 'config', serverUrl: '']) {
