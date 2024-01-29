@@ -31,7 +31,7 @@ pipeline {
       steps{
         script{
           sh 'sudo docker login -u mulki12 -p 12Februari@'
-          sh 'docker build -t "$JOB_NAME:$VERSION" .'
+          sh 'docker build -t $JOB_NAME:$VERSION .'
           sh 'docker image list'
          }
       }
