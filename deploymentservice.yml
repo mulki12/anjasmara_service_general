@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: anjasmara-service-general
-        image: 221047265242.dkr.ecr.ap-southeast-1.amazonaws.com/test-laravel:v1.$BUILD_ID
+        image: 221047265242.dkr.ecr.ap-southeast-1.amazonaws.com/test-laravel
         - containerPort: 3001       
 ---
 
