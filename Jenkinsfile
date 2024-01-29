@@ -17,23 +17,23 @@ pipeline {
       }
     }
     stage('Build image') {
-      steps{
-        script{
-          sh 'sudo docker login -u mulki12 -p 12Februari@'
-          sh 'docker build -t $JOB_NAME:$VERSION .'
-          sh 'docker image list'
-         }
+      when { tag "release-*" }
+        steps{
+          script{
+            sh 'sudo docker login -u mulki12 -p 12Februari@'
+            sh 'docker build -t $JOB_NAME:latest .'
+            sh 'docker image list'
+          }
+        }
       }
-    }
     // Uploading Docker images into AWS ECR
     stage('Pushing to ECR') {
-      when { tag "release-*" }
         steps{  
           script {
             sh 'aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 221047265242.dkr.ecr.ap-southeast-1.amazonaws.com' 
-            sh 'docker tag $JOB_NAME: ${REPOSITORY_URI}:$VERSION'
-            sh 'docker push ${REPOSITORY_URI}:$VERSION'
-            sh 'docker rmi $JOB_NAME:$VERSION ${REPOSITORY_URI}:$VERSION' // Delete docker images from server 
+            sh 'docker tag $JOB_NAME: ${REPOSITORY_URI}:latest'
+            sh 'docker push ${REPOSITORY_URI}:latest'
+            sh 'docker rmi $JOB_NAME:latest ${REPOSITORY_URI}:latest' // Delete docker images from server 
           }
         }
       }
