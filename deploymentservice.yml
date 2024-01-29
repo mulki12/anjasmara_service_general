@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: anjasmara-service-general
-        image: 221047265242.dkr.ecr.ap-southeast-1.amazonaws.com/waizly
+        image: 221047265242.dkr.ecr.ap-southeast-1.amazonaws.com/test-laravel:${version}
         ports:
         - containerPort: 3001       
 ---
