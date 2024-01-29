@@ -19,7 +19,7 @@ pipeline {
         script{
           sh 'docker build . '
           sh 'docker image list'
-          sh 'docker tag $JOB_NAME:v1.$BUILD_ID 221047265242.dkr.ecr.ap-southeast-1.amazonaws.com/test-laravel:v1.$BUILD_ID'
+          sh 'docker tag $JOB_NAME:v1.$BUILD_ID ${registry}:v1.$BUILD_ID'
          }
       }
     }
