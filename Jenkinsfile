@@ -31,7 +31,7 @@ pipeline {
          steps{  
            script {
              sh 'aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 221047265242.dkr.ecr.ap-southeast-1.amazonaws.com' 
-             sh 'docker tag ${IMAGE_REPO_NAME}:v1.$BUILD_ID ${REPOSITORY_URI}:v1.$BUILD_ID'
+             sh 'docker tag $JOB_NAME:v1.$BUILD_ID ${REPOSITORY_URI}:v1.$BUILD_ID'
              sh 'docker push ${registry}:v1.$BUILD_ID'
              sh 'docker rmi $JOB_NAME:v1.$BUILD_ID ${registry}:v1.$BUILD_ID' // Delete docker images from server 
            }
