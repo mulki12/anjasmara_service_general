@@ -16,17 +16,6 @@ pipeline {
          checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/mulki12/anjasmara_service_general.git']]])     
       }
     }
-    stage('Create version') {
-        steps {
-            script {
-                currentDateTime = sh script: """
-                    date +"-%Y%m%d_%H%M"
-                    """.trim(), returnStdout: true
-                version = currentDateTime.trim()  // the .trim() is necessary
-                echo "VERSION: " + version
-            }
-        }
-    }
     stage('Build image') {
       steps{
         script{
@@ -37,16 +26,17 @@ pipeline {
       }
     }
     // Uploading Docker images into AWS ECR
-       stage('Pushing to ECR') {
-         steps{  
-           script {
-             sh 'aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 221047265242.dkr.ecr.ap-southeast-1.amazonaws.com' 
-             sh 'docker tag $JOB_NAME: ${REPOSITORY_URI}:$VERSION'
-             sh 'docker push ${REPOSITORY_URI}:$VERSION'
-             sh 'docker rmi $JOB_NAME:$VERSION ${REPOSITORY_URI}:$VERSION' // Delete docker images from server 
-           }
+    stage('Pushing to ECR') {
+      when { tag "release-*" }
+        steps{  
+          script {
+            sh 'aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 221047265242.dkr.ecr.ap-southeast-1.amazonaws.com' 
+            sh 'docker tag $JOB_NAME: ${REPOSITORY_URI}:$VERSION'
+            sh 'docker push ${REPOSITORY_URI}:$VERSION'
+            sh 'docker rmi $JOB_NAME:$VERSION ${REPOSITORY_URI}:$VERSION' // Delete docker images from server 
           }
-         }
+        }
+      }
 
 //    stage('Deploy our image') {
 //      steps{
