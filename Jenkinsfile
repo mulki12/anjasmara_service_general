@@ -113,7 +113,7 @@ pipeline {
                     sh "ls -lah /home/jenkins/agent/workspace/${NAME_APP}/.git/objects"
                     sh "rm -rf /home/jenkins/agent/workspace/${NAME_APP}/.git/objects"
                     //sh "rsync --recursive --exclude=/home/jenkins/agent/workspace/test-laravel/config/.git/objects"
-                    sh "scp -o StrictHostKeyChecking=no -r /home/jenkins/agent/workspace/${NAME_APP} ${INSTANCE_USER}@${INSTANCE_IP}:/home/${INSTANCE_USER}/agent/workspace/"
+                    sh "scp -o StrictHostKeyChecking=no -r /home/jenkins/agent/workspace/test-laravel ${INSTANCE_USER}@${INSTANCE_IP}:/home/${INSTANCE_USER}/agent/workspace/"
                 
                     sh "ssh -o StrictHostKeyChecking=no ${INSTANCE_USER}@${INSTANCE_IP} docker build -t ${REPOSITORY_URI}:${IMAGE_TAG} /home/${INSTANCE_USER}/agent/workspace/${NAME_APP}/code"
 
