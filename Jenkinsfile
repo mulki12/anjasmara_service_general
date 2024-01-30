@@ -11,7 +11,7 @@ def CREDENTIAL_CODE_REPO="github-mulki"
 def CONFIG_REPO="https://github.com/mulki12/anjasmara_service_general_config.git"
 def CREDENTIAL_CONFIG_REPO="github-mulki"
 def KUBECONFIG="config"
-def REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/test-laravel"
+def REPOSITORY_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/test-laravel"
 
 pipeline {
 
@@ -141,7 +141,7 @@ pipeline {
                   sh "mkdir -p ~/.kube/"
                   writeFile file: '~/.kube/config', text: readFile(KUBECONFIG)
                   //sh 'sudo chmod u+x /usr/local/bin/kubectl', text:readFile(KUBECONFIG)
-                  sh "aws ecr get-login-password --region ap-southeast-1 | aws eks update-kubeconfig --name EKS-Cluster --region ap-southeast-1"
+                  //sh "aws ecr get-login-password --region ap-southeast-1 | aws eks update-kubeconfig --name EKS-Cluster --region ap-southeast-1"
                   sh """
             helm upgrade ${APP_NAME} ./helm/${APP_NAME} \
             --set-string image.repository=${REPOSITORY_URI},image.tag=${BUILD_ID} \
