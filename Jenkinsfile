@@ -110,12 +110,10 @@ pipeline {
 
                     sh "ssh -o StrictHostKeyChecking=no ${INSTANCE_USER}@${INSTANCE_IP} docker build -t ${IMAGE_REPO}:${IMAGE_TAG} /home/${INSTANCE_USER}/agent/workspace/${NAME_APP}/code"
 
-                    sh "ssh -o StrictHostKeyChecking=no ${INSTANCE_USER}@${INSTANCE_IP} docker push ${IMAGE_REPO}:${IMAGE_TAG}"
+                    sh "ssh -o StrictHostKeyChecking=no ${INSTANCE_USER}@${INSTANCE_IP} docker push ${REPOSITORY_URI}:${IMAGE_TAG}"
 
                     }
-                    sh "docker build -t ${NAME_APP}:${IMAGE_TAG} ."
 
-                    sh "ssh docker push ${REPOSITORY_URI}:${IMAGE_TAG}"
                     sh "ls -lah"
                }
             }
