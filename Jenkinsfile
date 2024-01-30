@@ -91,7 +91,7 @@ pipeline {
 
     stage("build image") {
       environment {
-        REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/test-laravel"
+        REPOSITORY_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/test-laravel"
       }
       steps {
         container("jnlp") {
@@ -132,6 +132,9 @@ pipeline {
     }
 
     stage('deployment') {
+      environment {
+        REPOSITORY_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/test-laravel"
+      }
         steps{
           container('helm'){
             script {
@@ -144,7 +147,7 @@ pipeline {
                   //sh "aws ecr get-login-password --region ap-southeast-1 | aws eks update-kubeconfig --name EKS-Cluster --region ap-southeast-1"
                   sh """
             helm upgrade ${APP_NAME} ./helm/${APP_NAME} \
-            --set-string image.repository=${REPOSITORY_URI},image.tag=${BUILD_ID} \
+            --set-string image.repository=${REPOSITORY_URI} --setimage.tag=${BUILD_ID} \
             -f ./helm/values.dev.yml --debug --install --namespace ${NAMESPACE}
             """
                 }
