@@ -38,7 +38,14 @@ pipeline {
                      values:
                      - agent
                  weight: 100
-          serviceAccountName: cd-jenkins
+          //serviceAccountName: cd-jenkins
+          // containers:
+          // - name: builders
+          //   image: masfikri/gcloud-helm-kubectl:v3.13.3
+          //   imagePullPolicy: IfNotPresent
+          //   command:
+          //   - cat
+          //   tty: true
       """
     }
   }
