@@ -1,5 +1,5 @@
 def INSTANCE_IP="10.1.63.14"
-def INSTANCE_USER="ubuntu"
+def INSTANCE_USER="jenkins"
 def AWS_ACCOUNT_ID="221047265242"
 def AWS_DEFAULT_REGION="ap-southeast-1"
 def APP_NAME="anjasmara_service_general"
@@ -106,7 +106,7 @@ pipeline {
                     sshagent(["pem-credential"]) {
 
                     sh "whoami"
-                    sh "scp -o StrictHostKeyChecking=no rm -rf /home/jenkins/agent/workspace/${NAME_APP}/.git"
+                    //sh "scp -o StrictHostKeyChecking=no rm -rf /home/jenkins/agent/workspace/${NAME_APP}/.git"
                     sh "scp -o StrictHostKeyChecking=no -r /home/jenkins/agent/workspace/${NAME_APP} ${INSTANCE_USER}@${INSTANCE_IP}:/home/${INSTANCE_USER}/agent/workspace/"
 
                     sh "ssh -o StrictHostKeyChecking=no ${INSTANCE_USER}@${INSTANCE_IP} docker build -t ${IMAGE_REPO}:${IMAGE_TAG} /home/${INSTANCE_USER}/agent/workspace/${NAME_APP}/code"
