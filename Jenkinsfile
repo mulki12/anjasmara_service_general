@@ -106,9 +106,9 @@ pipeline {
                     sshagent(["pem-credential"]) {
 
                     sh "whoami"
-                    sh "scp -o StrictHostKeyChecking=no -r /home/jenkins/agent/workspace/${NAME_APP} ${INSTANCE_USER}@${INSTANCE_IP}:/home/${INSTANCE_USER}/agent/workspace/"
+                    sh "scp -o StrictHostKeyChecking=no -r /home/jenkins/agent/workspace/${NAME_APP} ${INSTANCE_USER}@${INSTANCE_IP}:/var/lib/jenkins/agent/workspace/"
 
-                    sh "ssh -o StrictHostKeyChecking=no ${INSTANCE_USER}@${INSTANCE_IP} docker build -t ${IMAGE_REPO}:${IMAGE_TAG} /home/${INSTANCE_USER}/agent/workspace/${NAME_APP}/code"
+                    sh "ssh -o StrictHostKeyChecking=no ${INSTANCE_USER}@${INSTANCE_IP} docker build -t ${IMAGE_REPO}:${IMAGE_TAG} /var/lib/jenkins/agent/workspace/${NAME_APP}/code"
 
                     sh "ssh -o StrictHostKeyChecking=no ${INSTANCE_USER}@${INSTANCE_IP} docker push ${REPOSITORY_URI}:${IMAGE_TAG}"
 
