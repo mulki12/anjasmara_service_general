@@ -141,6 +141,7 @@ pipeline {
                   sh "mkdir -p ~/.kube/"
                   writeFile file: '~/.kube/config', text: readFile(KUBECONFIG)
                   //sh 'sudo chmod u+x /usr/local/bin/kubectl', text:readFile(KUBECONFIG)
+                  sh "aws ecr get-login-password --region ap-southeast-1 | aws eks update-kubeconfig --name EKS-Cluster --region ap-southeast-1"
                   sh """
             helm upgrade ${REPO_CODE_NAME} ./helm/${REPO_CODE_NAME} \
             --set-string image.repository=${REPOSITORY_URI},image.tag=${BUILD_ID} \
@@ -165,6 +166,7 @@ pipeline {
     //   }
     // }
     // Uploading Docker images into AWS ECR
+
     stage('Pushing to ECR') {
         steps{  
           script {
