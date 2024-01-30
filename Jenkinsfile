@@ -26,8 +26,8 @@ pipeline {
           tolerations:
           - key: "jenkins"
             operator: "Equal"
-            value: "agent"
-            effect: "NoSchedule"
+          //  value: "agent"
+          //  effect: "NoSchedule"
           affinity:
             nodeAffinity:
               preferredDuringSchedulingIgnoredDuringExecution:
