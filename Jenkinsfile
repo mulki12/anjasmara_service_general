@@ -143,7 +143,7 @@ pipeline {
                   //sh 'sudo chmod u+x /usr/local/bin/kubectl', text:readFile(KUBECONFIG)
                   sh "aws ecr get-login-password --region ap-southeast-1 | aws eks update-kubeconfig --name EKS-Cluster --region ap-southeast-1"
                   sh """
-            helm upgrade ${REPO_CODE_NAME} ./helm/${REPO_CODE_NAME} \
+            helm upgrade ${APP_NAMEE} ./helm/${APP_NAMEE} \
             --set-string image.repository=${REPOSITORY_URI},image.tag=${BUILD_ID} \
             -f ./helm/values.dev.yml --debug --install --namespace ${NAMESPACE}
             """
