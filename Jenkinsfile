@@ -102,7 +102,7 @@ pipeline {
                     sh "ls -lah"
                     sh "pwd"
 
-                    sh "ssh docker build -t ${NAME_APP}:${IMAGE_TAG} ."
+                    sh "docker build -t ${NAME_APP}:${IMAGE_TAG} ."
 
                     sh "ssh docker push ${REPOSITORY_URI}:${IMAGE_TAG}"
                     sh "ls -lah"
