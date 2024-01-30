@@ -103,7 +103,7 @@ pipeline {
                     
                     sh "ls -lah"
                     sh "pwd"
-                    sshagent(["${pem-credential}"]) {
+                    sshagent([${'pem-credential}']) {
 
                     sh "whoami"
                     sh "scp -o StrictHostKeyChecking=no -r /home/jenkins/agent/workspace/${APP_NAME} ${INSTANCE_USER}@${INSTANCE_IP}:/home/${INSTANCE_USER}/agent/workspace/"
