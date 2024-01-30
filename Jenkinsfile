@@ -43,7 +43,7 @@ pipeline {
           # Use service account that can deploy to all namespaces
           serviceAccountName: cd-jenkins
           containers:
-          - name: builders
+          - name: helm
             image: masfikri/gcloud-helm-kubectl:v3.13.3
             imagePullPolicy: IfNotPresent
             command:
