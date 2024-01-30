@@ -49,6 +49,9 @@ pipeline {
             command:
             - cat
             tty: true
+          - name: jnlp
+			      image: masfikri/jnlp-agent:4.13
+			      imagePullPolicy: IfNotPresent
       """
     }
   } 
@@ -107,13 +110,17 @@ pipeline {
 
                     sh "whoami"
                     //sh "scp -o StrictHostKeyChecking=no rm -rf /home/jenkins/agent/workspace/${NAME_APP}/.git"
+                    sh "ls -lah /home/jenkins/agent/workspace/${NAME_APP}/.git/objects"
+                    //sh "rsync --recursive --exclude=/home/jenkins/agent/workspace/test-laravel/config/.git/objects"
                     sh "scp -o StrictHostKeyChecking=no -r /home/jenkins/agent/workspace/${NAME_APP} ${INSTANCE_USER}@${INSTANCE_IP}:/home/${INSTANCE_USER}/agent/workspace/"
-
+                
                     sh "ssh -o StrictHostKeyChecking=no ${INSTANCE_USER}@${INSTANCE_IP} docker build -t ${REPOSITORY_URI}:${IMAGE_TAG} /home/${INSTANCE_USER}/agent/workspace/${NAME_APP}/code"
 
                     sh "ssh -o StrictHostKeyChecking=no ${INSTANCE_USER}@${INSTANCE_IP} docker push ${REPOSITORY_URI}:${IMAGE_TAG}"
 
                     }
+
+
 
                     sh "ls -lah"
                }
@@ -122,7 +129,7 @@ pipeline {
       }
     }
 
-    stage('deploy helm') {
+    stage('deployment') {
         steps{
           container('helm'){
             script {
