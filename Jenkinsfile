@@ -1,3 +1,5 @@
+def INSTANCE_IP="10.1.63.14"
+def INSTANCE_USER="ubuntu"
 def AWS_ACCOUNT_ID="221047265242"
 def AWS_DEFAULT_REGION="ap-southeast-1"
 def APP_NAME="anjasmara_service_general"
@@ -98,10 +100,19 @@ pipeline {
                     def commit_id = readFile('.git/commit-id').trim()
                     IMAGE_TAG = commit_id.substring(0,7)
 
-
+                    
                     sh "ls -lah"
                     sh "pwd"
+                    sshagent(["${pem-credential}"]) {
 
+                    sh "whoami"
+                    sh "scp -o StrictHostKeyChecking=no -r /home/jenkins/agent/workspace/${APP_NAME} ${INSTANCE_USER}@${INSTANCE_IP}:/home/${INSTANCE_USER}/agent/workspace/"
+
+                    sh "ssh -o StrictHostKeyChecking=no ${INSTANCE_USER}@${INSTANCE_IP} docker build -t ${IMAGE_REPO}:${IMAGE_TAG} /home/${INSTANCE_USER}/agent/workspace/${APPNAME}/code"
+
+                    sh "ssh -o StrictHostKeyChecking=no ${INSTANCE_USER}@${INSTANCE_IP} docker push ${IMAGE_REPO}:${IMAGE_TAG}"
+
+                    }
                     sh "docker build -t ${NAME_APP}:${IMAGE_TAG} ."
 
                     sh "ssh docker push ${REPOSITORY_URI}:${IMAGE_TAG}"
