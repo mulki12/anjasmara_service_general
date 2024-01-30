@@ -10,7 +10,7 @@ def CODE_REPO="https://github.com/mulki12/anjasmara_service_general.git"
 def CREDENTIAL_CODE_REPO="github-mulki"
 def CONFIG_REPO="https://github.com/mulki12/anjasmara_service_general_config.git"
 def CREDENTIAL_CONFIG_REPO="github-mulki"
-def KUBECONFIG="kube-config"
+def KUBECONFIG="config"
 def REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/test-laravel"
 
 pipeline {
@@ -79,7 +79,7 @@ pipeline {
                     branches: [[name: 'refs/heads/master']],
                     extensions: [[
                         $class: 'RelativeTargetDirectory',
-                        relativeTargetDir: 'config']],
+                        relativeTargetDir: 'repo-config']],
                     userRemoteConfigs: [[
                         url: "${CONFIG_REPO}",
                         credentialsId: "${CREDENTIAL_CONFIG_REPO}",
@@ -110,7 +110,7 @@ pipeline {
 
                     sh "whoami"
                     //sh "scp -o StrictHostKeyChecking=no rm -rf /home/jenkins/agent/workspace/${NAME_APP}/.git"
-                    sh "ls -lah /home/jenkins/agent/workspace/${NAME_APP}/.git/objects"
+                    //sh "ls -lah /home/jenkins/agent/workspace/${NAME_APP}/.git/objects"
                     sh "rm -rf /home/jenkins/agent/workspace/${NAME_APP}/.git/objects"
                     //sh "rsync --recursive --exclude=/home/jenkins/agent/workspace/test-laravel/config/.git/objects"
                     sh "scp -o StrictHostKeyChecking=no -r ../code ${INSTANCE_USER}@${INSTANCE_IP}:/home/${INSTANCE_USER}/agent/workspace/"
@@ -135,11 +135,11 @@ pipeline {
         steps{
           container('helm'){
             script {
-              withKubeConfig([credentialsId: 'kube-config', serverUrl: '']) {
-                dir ('config') {
+              withKubeConfig([credentialsId: 'config', serverUrl: '']) {
+                dir ('repo-config') {
                   echo "Deploy to cluster ${KUBECONFIG}"
-                  //sh "mkdir -p ~/.kube/"
-                  //writeFile file: '~/.kube/config', text: readFile(KUBECONFIG)
+                  sh "mkdir -p /root/.kube/"
+                  writeFile file: '/root/.kube/config', text: readFile(KUBECONFIG)
                   //sh 'sudo chmod u+x /usr/local/bin/kubectl', text:readFile(KUBECONFIG)
                   sh "aws ecr get-login-password --region ap-southeast-1 | aws eks update-kubeconfig --name EKS-Cluster --region ap-southeast-1"
                   sh """
