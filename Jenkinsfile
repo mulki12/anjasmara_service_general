@@ -70,7 +70,7 @@ pipeline {
                         relativeTargetDir: 'code']],
                     userRemoteConfigs: [[
                         url: "${CODE_REPO}",
-                        credentialsId: "${CREDENTIAL_CONFIG_REPO}",
+                        credentialsId: "${CREDENTIAL_CODE_REPO}",
                     ]]
                 ])
 
@@ -81,7 +81,7 @@ pipeline {
                         $class: 'RelativeTargetDirectory',
                         relativeTargetDir: 'repo-config']],
                     userRemoteConfigs: [[
-                        url: "${CONFIG_REPO}",
+                        url: "${REPO_CONFIG}",
                         credentialsId: "${CREDENTIAL_CONFIG_REPO}",
                     ]]
                 ])
